@@ -11,3 +11,4 @@ then
 echo "[MUTE]"
 else
 echo $volume_perc
+fi
