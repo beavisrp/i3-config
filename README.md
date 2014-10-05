@@ -1,15 +1,11 @@
 i3-config
 ==========
 
-**note: I am using Cinnamon again, so this repo will probably not be updated for a while.**
-
 
 ![Screenshot](screenshot.png) 
-<sup>(note: I rarely have floating windows besides popups/save dialogs etcetera. This window is floating to show my wallpaper and also to show window borders)</sup>
+<sup>(note: Showing just plain wallpaper with my i3bar at bottom.)</sup>
 
-These configuration files are for the popular X11 tilling window manager, i3. 
-
-[This](http://www.reddit.com/r/unixporn/comments/1cvsgv/archi3_finally_done_setting_up_my_conky_i3status/) is how this configuration *used* to look. See above for the most up-to-date screenshot (check commits to confirm).
+These configuration files are for the X11 tilling window manager, i3. 
 
 
 Files
@@ -17,9 +13,8 @@ Files
 
 * .i3/config - the main i3 config file containing key bindings and colours for windows.
 * .i3/conkyrc - the conky config for i3status.
-* .scripts/cmusconk.sh - used to display current cmus track in i3status.
-* .scripts/audiocontrols.sh - used so media keys work on cmus and audacious, depending on which is currently running. Not necessarily needed for all setups.
-* .i3/conkyrc - some meta stuff.
+* .scripts/volume.sh - used for display Pulseaudio volume (may need to edit before using on your system).
+* .scripts/weather.sh - used to show weather temperature (right now just tempreature, planning on displaying additional info in the future).
 
 Installation
 ------------
@@ -35,9 +30,9 @@ I've used GTK themes and installed GNOME so I have full support for them and for
 Credits
 -------
 
-This repo was forked from [here](https://github.com/ivyl/i3-config).
+This repo was originally forked from [here](https://github.com/ivyl/i3-config), I forked it from [here](https://github.com/NorthAntrim/i3-config).
 
-Other
------
+Note
+----
 
-That's all. Hopefully I didn't miss anything! If you try this out and it doesn't look like the example above, something's maybe not installed, needs customized for your system or I forgot to include a file (in which case, create a new issue).
+This version is not final, I'm planning on improving it during the time.
