@@ -1,65 +1,60 @@
 set $mod Mod4
 
-font xft:Terminus 9.5
-new_window pixel 2
+font xft:Terminus 7
+new_window pixel 1
+new_float     1pixel
 focus_follows_mouse  yes
 
 set $blue #005588
-set $gray1 #4F305E
-set $gray2 #333333
+set $gray1 #D64937
+set $gray2 #2d2d2d
 
 set $browser firefox
 
-client.focused            $gray1   $gray1   #FFFFFF   #333333
+client.focused            $gray1   $gray1   #FFFFFF   #2d2d2d
 client.focused_inactive   $gray2   $gray2   #FFFFFF   #000000
 client.unfocused          $gray2   $gray2   #FFFFFF   #000000
+client.urgent             $gray2   $gray2   #D64937   #000000
 
 # use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec mate-terminal
-bindsym XF86Explorer exec gnome-terminal
-bindsym $mod+Shift+Return exec urxvt
+bindsym $mod+Return exec konsole
 bindsym Print exec scrot -q 100 -e 'mv $f ~/Pictures'
 
 # sound shortcuts
-bindsym XF86AudioPlay exec ~/.scripts/audiocontrols.sh play
-bindsym XF86AudioStop exec ~/.scripts/audiocontrols.sh stop 
-bindsym XF86AudioNext exec ~/.scripts/audiocontrols.sh next
-bindsym XF86AudioPrev exec ~/.scripts/audiocontrols.sh stop
-bindsym XF86Tools exec gnome-terminal -x sh -c "cmus"
-bindsym XF86AudioRaiseVolume exec amixer set Master 3+ unmute
-bindsym XF86AudioLowerVolume exec amixer set Master 3- unmute
-bindsym XF86AudioMute exec amixer set Master mute
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 -- +10% && killall -SIGUSR1 i3status
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -- -10% && killall -SIGUSR1 i3status
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle
 
-# lock screen using cinnamon's screen lock
-bindsym XF86Calculator exec cinnamon-screensaver-command -l
+# brightness control 
+bindsym XF86MonBrightnessUp exec xbacklight +10 -time 0
+bindsym XF86MonBrightnessDown exec xbacklight -10 -time 0
+
+# change container layout (stacked, tabbed, toggle split)
+# bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+s layout toggle split
 
 # start browser
 bindsym $mod+c exec $browser
-bindsym XF86HomePage exec $browser
 
 # kill focused window
 bindsym $mod+Shift+Q kill
+bindsym Mod1+F4 kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run -nb black -nf white
+bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
-# screen lock
-bindsym Control+$mod+l exec slimlock
+# start xfe
+bindsym $mod+e exec xfe
 
 # change focus
-bindsym $mod+j focus left
-bindsym $mod+k focus down
-bindsym $mod+l focus up
-bindsym $mod+semicolon focus right
-
-# move focused window
-bindsym $mod+Shift+J move left
-bindsym $mod+Shift+K move down
-bindsym $mod+Shift+L move up
-bindsym $mod+Shift+colon move right
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
 
 # alternatively, you can use the cursor keys:
 bindsym $mod+Shift+Left move left
@@ -86,29 +81,28 @@ bindsym $mod+Shift+f floating toggle
 # change focus between tiling / floating windows
 
 # switch to workspace
-bindsym $mod+1 workspace 1: Home
+bindsym $mod+1 workspace 1: WWW
 bindsym $mod+2 workspace 2
 bindsym $mod+3 workspace 3
 bindsym $mod+4 workspace 4
 bindsym $mod+5 workspace 5
 bindsym $mod+6 workspace 6
 bindsym $mod+7 workspace 7
-bindsym $mod+8 workspace 8: SSH
-bindsym $mod+9 workspace 9: Music+etc
-bindsym $mod+0 workspace 10: IRC+Chat
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+bindsym $mod+0 workspace Mail
 
 # move focused container to workspace
-bindsym $mod+Shift+exclam move container to workspace 1: Home
-bindsym $mod+Shift+quotedbl move container to workspace 2
-bindsym $mod+Shift+sterling move container to workspace 3
-bindsym $mod+Shift+dollar move container to workspace 4
-bindsym $mod+Shift+percent move container to workspace 5
-bindsym $mod+Shift+asciicircum move container to workspace 6
-bindsym $mod+Shift+ampersand move container to workspace 7
-bindsym $mod+Shift+asterisk move container to workspace 8: SSH
-bindsym $mod+Shift+parenleft move container to workspace 9: Music+etc
-bindsym $mod+Shift+parenright move container to workspace 10: IRC+Chat
-bindsym $mod+Shift+underscore move container to workspace 11: Daemons
+bindsym $mod+Shift+1 move container to workspace 1: WWW
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace Mail
 
 # reload the configuration file
 bindsym $mod+Shift+C reload
@@ -125,16 +119,10 @@ mode "resize" {
         # Pressing right will grow the window’s width.
         # Pressing up will shrink the window’s height.
         # Pressing down will grow the window’s height.
-        bindsym j resize shrink width 10 px or 10 ppt
-        bindsym k resize grow height 10 px or 10 ppt
-        bindsym l resize shrink height 10 px or 10 ppt
-        bindsym semicolon resize grow width 10 px or 10 ppt
-
-        # same bindings, but for the arrow keys
-        bindsym 113 resize shrink width 10 px or 10 ppt
-        bindsym 116 resize grow height 10 px or 10 ppt
-        bindsym 111 resize shrink height 10 px or 10 ppt
-        bindsym 114 resize grow width 10 px or 10 ppt
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Right resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Down resize grow width 10 px or 10 ppt
 
         # back to normal: Enter or Escape
         bindsym Return mode "default"
@@ -144,20 +132,30 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 bar {
-        position top
+        position bottom
         status_command ~/.i3/conky
         colors { 
                 statusline #AAAAAA
-                background #333333
-                focused_workspace #333333 #333333 #FFFFFF
-                inactive_workspace #484848 #484848 #AAAAAA
+                background #2d2d2d
+                focused_workspace #D64937 #D64937 #FFFFFF
+                inactive_workspace #2d2d2d #2d2d2d #ffffff
         }
 }
 
-exec /usr/lib/gnome-settings-daemon/gnome-settings-daemon
-exec --no-startup-id /bin/sh ~/.fehbg
-exec gnome-keyring-daemon
-exec dropbox start
+# workspace assignment (use "xprop")
+assign [class="^Firefox$"] 1: WWW
+assign [class="^Thunderbird"] Mail
+assign [class="^Transmission"] 9
 
-for_window [title="synapse"] border none
-for_window [class="Audacious"] floating enable
+# run apps at system start
+exec xbacklight -set 80
+exec firefox 
+exec thunderbird 
+exec nm-applet
+exec --no-startup-id /bin/sh ~/.fehbg
+exec xcompmgr -c -f -n -D 1
+
+#No broder for apps
+for_window [class="^Firefox$"] border none
+for_window [class="^Thunderbird$"] border none
+for_window [class="^Transmission$"] border none

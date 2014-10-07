@@ -1,30 +1,64 @@
 background        no
 out_to_console 	  yes
-update_interval	  0.5
+update_interval	  1
 total_run_times	  0
 short_units	  yes
 pad_percents	  3
+color1 ffffff
 
 TEXT
 ,[
+#Shows keyboard layout
+ {"full_text": " ⌨ [${exec ~/Applications/xkblayout-state/xkblayout-state print %s}] ", "color":"\#ffffff"},
 #Shows uploadspeed
- {"full_text": " ▲ [${upspeedf wlan0}] ", "color":"\#ff0000"},
+ {"full_text": " ▲ [${upspeedf wlan0}] ", "color":"\#ffffff"},
 #Shows downloadspeed
- {"full_text": " ▼ [${downspeedf wlan0}] ", "color":"\#00fff2"},
+ {"full_text": " ▼ [${downspeedf wlan0}] ", "color":"\#ffffff"},
 #Current backlight Level
- {"full_text": " ☼ [${exec xbacklight | awk '{a=$1} END{printf("%0.f\n", a)}'}%] ", "color":"\#FFFF00"},
+ {"full_text": " ☼ [${exec xbacklight | awk '{a=$1} END{printf("%0.f\n", a)}'}%] ", "color":"\#ffffff"},
 #Current temperature (weather)
- {"full_text": " ☁ [${execi 3000 ~/.scripts/weather.sh}] ","color": "\#268BD2"},
+ {"full_text": " ☁ [${execi 60 ~/.scripts/weather.sh}] ","color": "\#ffffff"},
 #Finds current volume
- {"full_text": " ♩ ${exec ~/.scripts/volume.sh} ", "color":"\#26D28B"},
+# {"full_text": " ♩ ${exec amixer -D pulse | grep Playback | tail -1 | awk '{print $5}'} ", "color":"\#ffffff"},
+
+{"full_text":" ♩ [","color":"\#FFFFFF","separator":false,"separator_block_width":0},\
+{"full_text":"${if_match ${exec .scripts/volume.sh}==1}${exec echo MUTE}","color":"\#D64937","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":"${if_match ${exec .scripts/volume.sh}==0}${exec amixer -D pulse | grep Playback | tail -1 | awk '{print $5}' | tr -d "[]"}","color":"\#FFFFFF","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":"${endif}${endif}"},\
+{"full_text":"] ","color":"\#FFFFFF"},\
+
 #Shows current memory usage with a bar
- {"full_text": " ■ [$membar] ", "color":"\#B58900"},
+ {"full_text": " ■ [$membar] ", "color":"\#ffffff"},
 #Shows current CPU usage with a bar
- {"full_text": " ● [$cpubar] ", "color":"\#00A9B5"},
+ {"full_text": " ● [$cpubar] ", "color":"\#ffffff"},
 #Shows temperature
- {"full_text": " 🔥  [${exec sensors | grep temp1 | awk '{print $2}' | tr -d "+"}] ", "color":"\#33CC99"},
+# {"full_text": " 🔥 [${exec sensors | grep temp1 | awk '{print $2}' | tr -d "+" | cut -c1-2}°C] ", "color":"\#ffffff"},
+
+{"full_text":" 🔥 [","color":"\#FFFFFF","separator":false,"separator_block_width":0},\
+{"full_text":"${if_match ${exec sensors | grep temp1 | awk '{print $2}' | tr -d "+" | cut -c1-2}<50}${exec sensors | grep temp1 | awk '{print $2}' | tr -d "+" | cut -c1-2}","color":"\#FFFFFF","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":"${if_match ${exec sensors | grep temp1 | awk '{print $2}' | tr -d "+" | cut -c1-2}<70}${exec sensors | grep temp1 | awk '{print $2}' | tr -d "+" | cut -c1-2}","color":"\#FFFF00","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":"${if_match ${exec sensors | grep temp1 | awk '{print $2}' | tr -d "+" | cut -c1-2}>=70}${exec sensors | grep temp1 | awk '{print $2}' | tr -d "+" | cut -c1-2}","color":"\#D64937","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":"${endif}${endif}${endif}"},\
+{"full_text":"°C] ","color":"\#FFFFFF"},\
+
 #Shows battery info
- {"full_text": " ⚡ [${exec acpi -b | awk '{print $3 $4 $5}' | sed 's/,/ /g'}] ", "color": "\#268BD2"},
+# {"full_text": " ⚡ [${exec acpi -b | awk '{print $3 $4 $5}' | sed 's/,/ /g'}] ", "color": "\#ffffff"},
+
+{"full_text":" ⚡ [","color":"\#FFFFFF","separator":false,"separator_block_width":0},\
+{"full_text":"${if_match ${exec acpi -b | awk '{print $4}' | tr -d '%,'}==100}${exec acpi -b | awk '{print $3 $4 $5}' | sed 's/,/ /g'}","color":"\#D64937","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":"${if_match ${exec acpi -b | awk '{print $4}' | tr -d '%,'}<15}${exec acpi -b | awk '{print $3 $4 $5}' | sed 's/,/ /g'}","color":"\#D64937","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":"${if_match ${exec acpi -b | awk '{print $4}' | tr -d '%,'}>=15}${exec acpi -b | awk '{print $3 $4 $5}' | sed 's/,/ /g'}","color":"\#FFFFFF","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":"${endif}${endif}${endif}"},\
+{"full_text":"] ","color":"\#FFFFFF"},\
+
 #Shows time
- {"full_text": " ⏰ [${time %a %d %b} ${time %H:%M:%S}] ", "color": "\#2fdc57"}
+ {"full_text": " ⏰ [${time %x} ${time %X}] ", "color": "\#ffffff"}
 ]
