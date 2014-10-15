@@ -2,6 +2,8 @@ set $mod Mod4
 
 font xft:Terminus 7
 new_window pixel 1
+hide_edge_borders horizontal
+
 new_float     1pixel
 focus_follows_mouse  yes
 
@@ -28,9 +30,11 @@ bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 -- +10
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -- -10% && killall -SIGUSR1 i3status
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute 0 toggle
 
-# brightness control 
+# brightness control
 bindsym XF86MonBrightnessUp exec xbacklight +10 -time 0
 bindsym XF86MonBrightnessDown exec xbacklight -10 -time 0
+bindsym $mod+XF86MonBrightnessUp exec xbacklight =100 -time 0
+bindsym $mod+XF86MonBrightnessDown exec xbacklight -25 -time 0
 
 # change container layout (stacked, tabbed, toggle split)
 # bindsym $mod+s layout stacking
@@ -47,8 +51,9 @@ bindsym Mod1+F4 kill
 # start dmenu (a program launcher)
 bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
 
-# start xfe
+# start File Manager
 bindsym $mod+e exec xfe
+#bindsym $mod+Shift+e exec thunar
 
 # change focus
 bindsym $mod+Left focus left
@@ -71,10 +76,6 @@ bindsym $mod+v split v
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen
 
-# change container layout (tabbed, toggle split)
-bindsym $mod+n layout tabbed
-bindsym $mod+m layout toggle split
-
 # toggle tiling / floating
 bindsym $mod+Shift+f floating toggle
 
@@ -90,7 +91,8 @@ bindsym $mod+6 workspace 6
 bindsym $mod+7 workspace 7
 bindsym $mod+8 workspace 8
 bindsym $mod+9 workspace 9
-bindsym $mod+0 workspace Mail
+bindsym $mod+0 workspace 10
+bindsym $mod+m workspace Mail
 
 # move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace 1: WWW
@@ -102,7 +104,8 @@ bindsym $mod+Shift+6 move container to workspace 6
 bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
-bindsym $mod+Shift+0 move container to workspace Mail
+bindsym $mod+Shift+0 move container to workspace 10
+bindsym $mod+Shift+m move container to workspace Mail
 
 # reload the configuration file
 bindsym $mod+Shift+C reload
@@ -132,25 +135,26 @@ mode "resize" {
 bindsym $mod+r mode "resize"
 
 bar {
-        position bottom
+        position top
         status_command ~/.i3/conky
-        colors { 
+        colors {
                 statusline #AAAAAA
                 background #2d2d2d
                 focused_workspace #D64937 #D64937 #FFFFFF
                 inactive_workspace #2d2d2d #2d2d2d #ffffff
+                urgent_workspace #D64937 #2d2d2d #FFFFFF
         }
 }
 
 # workspace assignment (use "xprop")
 assign [class="^Firefox$"] 1: WWW
 assign [class="^Thunderbird"] Mail
-assign [class="^Transmission"] 9
+assign [class="^Transmission"] 10
 
 # run apps at system start
 exec xbacklight -set 80
-exec firefox 
-exec thunderbird 
+exec firefox
+exec thunderbird
 exec nm-applet
 exec --no-startup-id /bin/sh ~/.fehbg
 exec xcompmgr -c -f -n -D 1
