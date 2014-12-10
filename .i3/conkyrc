@@ -2,84 +2,152 @@ background        no
 out_to_console 	  yes
 update_interval	  1
 total_run_times	  0
+double_buffer no
 short_units	  yes
 pad_percents	  3
 uppercase no
 
 TEXT
 ,[
-#Test if_up to determine if using wifi or lan or neither out_to_console - not working
-#{"full_text":"${if_up wlan0}${exec echo 'Wifi'}","color":"\#616161"},\
-#{"full_text":"${else}"},\
-#{"full_text":"${if_up eth0}${exec echo 'LAN'}","color":"\#616161"},\
-#{"full_text":"${else}"},\
-#{"full_text":"${exec echo 'No connection'}","color": "\#616161"},\
-#{"full_text":"${endif}${endif}"},\
-
 #Shows type of internet connection, type of connection
-{"full_text":"UP","color":"\#616161","separator":false,"separator_block_width":0},{"full_text": " ${upspeed wlan0} ", "color":"\#ffffff","separator":false,"separator_block_width":0},
-{"full_text":"DOWN","color":"\#616161","separator":false,"separator_block_width":0},{"full_text": " ${downspeed wlan0} ", "color":"\#ffffff","separator":false,"separator_block_width":0},
+{"full_text":"${if_existing /proc/net/route wlan0}"},\
+	{"full_text":"WIFI","color":"\#616161","separator":false,"separator_block_width":0},\
+	{"full_text":" ${upspeed wlan0} ", "color":"\#ffffff","separator":false,"separator_block_width":0},\
+	{"full_text":"|","color":"\#616161","separator":false,"separator_block_width":0},\
+	{"full_text": " ${downspeed wlan0} ", "color":"\#ffffff","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":"${if_existing /proc/net/route eth0}"},\
+	{"full_text":"LAN","color":"\#616161","separator":false,"separator_block_width":0},\
+	{"full_text":" ${upspeed eth0} ", "color":"\#ffffff","separator":false,"separator_block_width":0},\
+	{"full_text":"|","color":"\#616161","separator":false,"separator_block_width":0},\
+	{"full_text": " ${downspeed eth0} ", "color":"\#ffffff","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+	{"full_text":"NO CONNECTION ","color":"\#D64937","separator":false,"separator_block_width":0},\
+{"full_text":"${endif}${endif}"},\
 
-#Shows keyboard layout
-  {"full_text":"LAYOUT","color":"\#616161","separator":false,"separator_block_width":0},{"full_text": " ${exec ~/Applications/xkblayout-state/xkblayout-state print %s | awk '{print toupper($0)}'} ", "color":"\#ffffff","separator":false,"separator_block_width":0},
+#New BRIGHTNESS indicator (every letter represents 10% of brightness)
+#letter B 10%
+{"full_text":"${if_match ${exec xbacklight | awk '{a=$1} END{printf("%0.f\n", a)}'}>=10} B","color":"\#ffffff","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":" B","color":"\#616161","separator":false,"separator_block_width":0},\
+{"full_text":"${endif}"},\
+#letter R 20%
+{"full_text":"${if_match ${exec xbacklight | awk '{a=$1} END{printf("%0.f\n", a)}'}>=20}R","color":"\#ffffff","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":"R","color":"\#616161","separator":false,"separator_block_width":0},\
+{"full_text":"${endif}"},\
+#letter I 30%
+{"full_text":"${if_match ${exec xbacklight | awk '{a=$1} END{printf("%0.f\n", a)}'}>=30}I","color":"\#ffffff","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":"I","color":"\#616161","separator":false,"separator_block_width":0},\
+{"full_text":"${endif}"},\
+#letter G 40%
+{"full_text":"${if_match ${exec xbacklight | awk '{a=$1} END{printf("%0.f\n", a)}'}>=40}G","color":"\#ffffff","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":"G","color":"\#616161","separator":false,"separator_block_width":0},\
+{"full_text":"${endif}"},\
+#letter H 50%
+{"full_text":"${if_match ${exec xbacklight | awk '{a=$1} END{printf("%0.f\n", a)}'}>=50}H","color":"\#ffffff","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":"H","color":"\#616161","separator":false,"separator_block_width":0},\
+{"full_text":"${endif}"},\
+#letter T 60%
+{"full_text":"${if_match ${exec xbacklight | awk '{a=$1} END{printf("%0.f\n", a)}'}>=60}T","color":"\#ffffff","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":"T","color":"\#616161","separator":false,"separator_block_width":0},\
+{"full_text":"${endif}"},\
+#letter N 70%
+{"full_text":"${if_match ${exec xbacklight | awk '{a=$1} END{printf("%0.f\n", a)}'}>=70}N","color":"\#ffffff","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":"N","color":"\#616161","separator":false,"separator_block_width":0},\
+{"full_text":"${endif}"},\
+#letter E 80%
+{"full_text":"${if_match ${exec xbacklight | awk '{a=$1} END{printf("%0.f\n", a)}'}>=80}E","color":"\#ffffff","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":"E","color":"\#616161","separator":false,"separator_block_width":0},\
+{"full_text":"${endif}"},\
+#letter S 90%
+{"full_text":"${if_match ${exec xbacklight | awk '{a=$1} END{printf("%0.f\n", a)}'}>=90}S","color":"\#DBC84D","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":"S","color":"\#616161","separator":false,"separator_block_width":0},\
+{"full_text":"${endif}"},\
+#letter S 100%
+{"full_text":"${if_match ${exec xbacklight | awk '{a=$1} END{printf("%0.f\n", a)}'}>=100}S","color":"\#DBC84D","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":"S","color":"\#616161","separator":false,"separator_block_width":0},\
+{"full_text":"${endif}"},\
 
-#Current backlight Level
-  {"full_text":"BRIGHTNESS","color":"\#616161","separator":false,"separator_block_width":0},{"full_text": " ${exec xbacklight | awk '{a=$1} END{printf("%0.f\n", a)}'}% ", "color":"\#ffffff","separator":false,"separator_block_width":0},
-
-#Current temperature (weather)
-#{"full_text":"${if_existing ${execi 60 ~/.scripts/weather.sh}}${execi 60 echo 'WEATHER'}","color":"\#616161","separator":false,"separator_block_width":0},\
-#{"full_text":"${else}"},\
-#{"full_text":"","color":"\#616161","separator":false,"separator_block_width":0},\
-#{"full_text":"${endif}"},\
-#{"full_text":"${if_existing ${execi 60 ~/.scripts/weather.sh}}${execi 60 ~/.scripts/weather.sh} ","color": "\#ffffff","separator":false,"separator_block_width":0},\
-#{"full_text":"${else}"},\
-#{"full_text":"","color":"\#616161","separator":false,"separator_block_width":0},\
-#{"full_text":"${endif}${endif}"},
-{"full_text":"WEATHER","color":"\#616161","separator":false,"separator_block_width":0},
-{"full_text": " ${execi 60 ~/.scripts/weather.sh} ","color": "\#ffffff","separator":false,"separator_block_width":0},
+#Current temperature (weather), REALFEEL
+{"full_text":"${if_existing /proc/net/route wlan0}"},\
+	{"full_text":" WEATHER","color":"\#616161","separator":false,"separator_block_width":0},\
+	{"full_text": " ${execi 60 ~/.i3/weather.sh} ","color": "\#ffffff","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text":"${if_existing /proc/net/route eth0}"},\
+	{"full_text":" WEATHER","color":"\#616161","separator":false,"separator_block_width":0},\
+	{"full_text": " ${execi 60 ~/.i3/weather.sh} ","color": "\#ffffff","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+	{"full_text":" ","color":"\#ffffff","separator":false,"separator_block_width":0},\
+{"full_text":"${endif}${endif}"},\
 
 #Finds current volume
 {"full_text":"VOLUME ","color":"\#616161","separator":false,"separator_block_width":0},\
-{"full_text":"${if_match ${exec .scripts/volume.sh}==1}${exec echo MUTED}","color":"\#D64937","separator":false,"separator_block_width":0},\
+{"full_text":"${if_match ${exec ~/.i3/volume.sh}==1}MUTED","color":"\#D64937","separator":false,"separator_block_width":0},\
 {"full_text":"${else}"},\
-{"full_text":"${if_match ${exec exec amixer -D pulse | grep Playback | tail -1 | awk '{print $5}' | tr -d "[%]"}>100}${exec amixer -D pulse | grep Playback | tail -1 | awk '{print $5}' | tr -d "[]"}","color":"\#DBC84D","separator":false,"separator_block_width":0},\
+{"full_text":"${if_match ${exec amixer -D pulse | grep Playback | tail -1 | awk '{print $5}' | tr -d "[%]"}>100}${exec amixer -D pulse | grep Playback | tail -1 | awk '{print $5}' | tr -d "[]"}","color":"\#DBC84D","separator":false,"separator_block_width":0},\
 {"full_text":"${else}"},\
-{"full_text":"${if_match ${exec .scripts/volume.sh}==0}${exec amixer -D pulse | grep Playback | tail -1 | awk '{print $5}' | tr -d "[]"}","color":"\#FFFFFF","separator":false,"separator_block_width":0},\
+{"full_text":"${if_match ${exec ~/.i3/volume.sh}==0}${exec amixer -D pulse | grep Playback | tail -1 | awk '{print $5}' | tr -d "[]"}","color":"\#ffffff","separator":false,"separator_block_width":0},\
 {"full_text":"${endif}${endif}${endif}"},\
-{"full_text":" ","color":"\#FFFFFF","separator":false,"separator_block_width":0},\
+{"full_text":" ","color":"\#ffffff","separator":false,"separator_block_width":0},\
 
 #Shows current memory usage with a bar
- {"full_text":"RAM","color":"\#616161","separator":false,"separator_block_width":0},{"full_text": " |$membar| ", "color":"\#ffffff","separator":false,"separator_block_width":0},
+{"full_text":"RAM","color":"\#616161","separator":false,"separator_block_width":0},\
+{"full_text": "${if_match $memperc>50} $membar ", "color":"\#DBC84D","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text": " $membar ", "color":"\#ffffff","separator":false,"separator_block_width":0},\
+{"full_text":"${endif}"},\
 
 #Shows current CPU usage with a bar
- {"full_text":"CPU","color":"\#616161","separator":false,"separator_block_width":0},{"full_text": " |$cpubar| ", "color":"\#ffffff","separator":false,"separator_block_width":0},
+{"full_text":"CPU","color":"\#616161","separator":false,"separator_block_width":0},\
+{"full_text": "${if_match $cpu>50} $cpubar ", "color":"\#DBC84D","separator":false,"separator_block_width":0},\
+{"full_text":"${else}"},\
+{"full_text": " $cpubar ", "color":"\#ffffff","separator":false,"separator_block_width":0},\
+{"full_text":"${endif}"},\
 
 #Shows temperature
 {"full_text":"TEMP ","color":"\#616161","separator":false,"separator_block_width":0},\
-{"full_text":"${if_match ${exec sensors | grep temp1 | awk '{print $2}' | tr -d "+" | cut -c1-2}<50}${exec sensors | grep temp1 | awk '{print $2}' | tr -d "+" | cut -c1-2,5-7}","color":"\#FFFFFF","separator":false,"separator_block_width":0},\
+{"full_text":"${if_match $acpitemp<55}$acpitemp°C ","color":"\#ffffff","separator":false,"separator_block_width":0},\
 {"full_text":"${else}"},\
-{"full_text":"${if_match ${exec sensors | grep temp1 | awk '{print $2}' | tr -d "+" | cut -c1-2}<70}${exec sensors | grep temp1 | awk '{print $2}' | tr -d "+" | cut -c1-2,5-7}","color":"\#DBC84D","separator":false,"separator_block_width":0},\
+{"full_text":"${if_match $acpitemp<70}$acpitemp°C ","color":"\#DBC84D","separator":false,"separator_block_width":0},\
 {"full_text":"${else}"},\
-{"full_text":"${if_match ${exec sensors | grep temp1 | awk '{print $2}' | tr -d "+" | cut -c1-2}>=70}${exec sensors | grep temp1 | awk '{print $2}' | tr -d "+" | cut -c1-2,5-7}","color":"\#D64937","separator":false,"separator_block_width":0},\
+{"full_text":"${if_match $acpitemp>=70}$acpitemp°C ","color":"\#D64937","separator":false,"separator_block_width":0},\
 {"full_text":"${else}"},\
 {"full_text":"${endif}${endif}${endif}"},\
-{"full_text":" ","color":"\#FFFFFF","separator":false,"separator_block_width":0},\
 
 #Shows battery info
-{"full_text":"POWER ","color":"\#616161","separator":false,"separator_block_width":0},\
-{"full_text":"${if_match ${exec acpi -b | awk '{print $4}' | tr -d '%,'}==100}${exec acpi -b | awk '{print $3 $4 $5}' | sed 's/,/ /g' | awk '{print toupper($0) }'}","color":"\#D64937","separator":false,"separator_block_width":0},\
+{"full_text":"${if_match ${exec ~/.i3/power_advanced.sh}==0}"},\
+	{"full_text":"CHARGING ","color":"\#616161","separator":false,"separator_block_width":0},\
+		{"full_text":"${if_match ${exec acpi -b | awk '{print $4}' | tr -d '%,'}>=98}${exec acpi -b | sed 's/,/ /g' | awk '{print toupper($4)}'} ","color":"\#DBC84D","separator":false,"separator_block_width":0},\
+		{"full_text":"${else}"},\
+		{"full_text":"${exec acpi -b | sed 's/,/ /g' | awk '{print toupper($4)}'} ","color":"\#FFFFFF","separator":false,"separator_block_width":0},\
+		{"full_text":"${endif}"},\
+		{"full_text":"${exec acpi -b | sed 's/,/ /g' | awk '{print toupper($5)}'}","color":"\#FFFFFF","separator":false,"separator_block_width":0},\
 {"full_text":"${else}"},\
-{"full_text":"${if_match ${exec acpi -b | awk '{print $4}' | tr -d '%,'}<=15}${exec acpi -b | awk '{print $3 $4 $5}' | sed 's/,/ /g' | awk '{print toupper($0) }'}","color":"\#D64937","separator":false,"separator_block_width":0},\
+{"full_text":"${if_match ${exec ~/.i3/power_advanced.sh}==1}"},\
+	{"full_text":"BATTERY FULL","color":"\#D64937","separator":false,"separator_block_width":0},\
 {"full_text":"${else}"},\
-{"full_text":"${if_match ${exec acpi -b | awk '{print $4}' | tr -d '%,'}>15}${exec acpi -b | awk '{print $3 $4 $5}' | sed 's/,/ /g' | awk '{print toupper($0) }'}","color":"\#FFFFFF","separator":false,"separator_block_width":0},\
-{"full_text":"${else}"},\
-{"full_text":"${endif}${endif}${endif}"},\
-{"full_text":" ","color":"\#FFFFFF","separator":false,"separator_block_width":0},\
+	{"full_text":"DISCHARGING ","color":"\#616161","separator":false,"separator_block_width":0},\
+		{"full_text":"${if_match ${exec acpi -b | awk '{print $4}' | tr -d '%,'}<=10}${exec acpi -b | sed 's/,/ /g' | awk '{print toupper($4)}'} ","color":"\#D64937","separator":false,"separator_block_width":0},\
+		{"full_text":"${else}"},\
+		{"full_text":"${if_match ${exec acpi -b | awk '{print $4}' | tr -d '%,'}<=20}${exec acpi -b | sed 's/,/ /g' | awk '{print toupper($4)}'} ","color":"\#DBC84D","separator":false,"separator_block_width":0},\
+		{"full_text":"${else}"},\
+		{"full_text":"${exec acpi -b | sed 's/,/ /g' | awk '{print toupper($4)}'} ","color":"\#FFFFFF","separator":false,"separator_block_width":0},\
+		{"full_text":"${endif}${endif}"},\
+		{"full_text":"${exec acpi -b | sed 's/,/ /g' | awk '{print toupper($5)}'}","color":"\#FFFFFF","separator":false,"separator_block_width":0},\
+{"full_text":"${endif}${endif}"},\
 
 #Shows date
- {"full_text":"DATE","color":"\#616161","separator":false,"separator_block_width":0},{"full_text": " ${time %x} ", "color": "\#ffffff","separator":false,"separator_block_width":0},
-
+{"full_text":" DATE","color":"\#616161","separator":false,"separator_block_width":0},{"full_text": " ${exec echo `date +"%d. %b %Y"` | awk '{print toupper($0)}'} ", "color": "\#ffffff","separator":false,"separator_block_width":0},
 
 #Shows time
- {"full_text":"TIME","color":"\#616161","separator":false,"separator_block_width":0},{"full_text": " ${time %X} ", "color": "\#ffffff","separator":false,"separator_block_width":0}
+{"full_text":"TIME","color":"\#616161","separator":false,"separator_block_width":0},{"full_text": " ${time %X} ", "color": "\#ffffff","separator":false,"separator_block_width":0}
 ]
